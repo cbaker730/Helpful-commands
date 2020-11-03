@@ -10,4 +10,14 @@ Get-ADUser <id>
 Get-ADUser <id> -Properties *
 
 Get-ADUser -Filter 'mail -like "mail@mail.com"'
+Get-ADUser -Filter 'Name -like "Baker*"' | Format-Table Name, SamAccountName -AutoSize
+
+
+# Get user information for one or more users from a file containing email addresses and output in semicolon-delimited format
+$filename = "c:\data\accounts.txt"
+Get-Content $filename | ForEach-Object {
+    $user = Get-ADUser -Filter 'mail -like $_' -Properties LastLogonDate
+    $user.Name + ";" + $user.Enabled + ";" + $user.SamAccountName + ";" + $user.LastLogonDate
+}
+
 
