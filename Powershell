@@ -1,9 +1,5 @@
-
-
-
-
-
 ### AD queries (requires RSAT)
+
 
 # Get user information
 Get-ADUser <id>
