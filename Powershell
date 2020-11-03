@@ -4,6 +4,8 @@
 # Get user information
 Get-ADUser <id>
 Get-ADUser <id> -Properties *
+Get-ADUser <id> | Get-Member
+Get-ADUser <id> -Properties Extended | Get-Member
 
 Get-ADUser -Filter 'mail -like "mail@mail.com"'
 Get-ADUser -Filter 'Name -like "Baker*"' | Format-Table Name, SamAccountName -AutoSize
@@ -17,3 +19,8 @@ Get-Content $filename | ForEach-Object {
 }
 
 
+
+
+### Splunk queries  https://www.splunk.com/pdfs/solution-guides/splunk-quick-reference-guide.pdf or https://docs.splunk.com/Documentation/Splunk/8.1.0/SearchReference/Stats
+
+index=* "*first.last@company.com*" | stats count by sourcetype
