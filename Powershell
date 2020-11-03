@@ -1,0 +1,13 @@
+
+
+
+
+
+### AD queries (requires RSAT)
+
+# Get user information
+Get-ADUser <id>
+Get-ADUser <id> -Properties *
+
+Get-ADUser -Filter 'mail -like "mail@mail.com"'
+
