@@ -1,5 +1,10 @@
 ### Splunk queries  https://www.splunk.com/pdfs/solution-guides/splunk-quick-reference-guide.pdf or https://docs.splunk.com/Documentation/Splunk/8.1.0/SearchReference/Stats
 
+# List indexes
+| eventcount summarize=false index=* index=_* | dedup index | fields index
+| tstats count WHERE index=* by index | table index
+
+
 index=* "*first.last@company.com*" | stats count by sourcetype
 
 index="<index>" | spath <field to be searched> | search <field to be searched>="*<value>*" | table <field(s) to be displayed>
