@@ -3,3 +3,8 @@
 index=* "*first.last@company.com*" | stats count by sourcetype
 
 index="<index>" | spath <field to be searched> | search <field to be searched>="*<value>*" | table <field(s) to be displayed>
+
+
+index="rapid7" ip="10.11.12.13" | table ip, host, severity, signature, signature_id, first_discovered, most_recently_discovered
+index="qualys" ip="10.11.12.13" | table ip, hostname, severity, title, qid, first_found, last_found
+
