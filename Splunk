@@ -3,6 +3,10 @@
 # List indexes
 | eventcount summarize=false index=* index=_* | dedup index | fields index
 | tstats count WHERE index=* by index | table index
+| tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
+
+# Index health
+| tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
 
 
 index=* "*first.last@company.com*" | stats count by sourcetype
@@ -16,4 +20,3 @@ index="qualys" ip="10.11.12.13" | table ip, hostname, severity, title, qid, firs
 # Show count of users who accessed github.com each day, and list users by name
 index="zscaler" sourcetype="zscalernss-web" dest="*.github.com*" | dedup user | sort user | timechart span=1d count(user) as total_users
 index="zscaler" sourcetype="zscalernss-web" dest="*.github.com*" | dedup user | sort user | table user
-| tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
