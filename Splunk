@@ -4,6 +4,7 @@
 | eventcount summarize=false index=* index=_* | dedup index | fields index
 | tstats count WHERE index=* by index | table index
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
+| tstats count where index=zscaler sourcetype=zscalernss-web by _time span=7d
 
 # Index health
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
