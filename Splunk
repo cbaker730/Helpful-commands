@@ -5,6 +5,9 @@
 | tstats count WHERE index=* by index | table index
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=7d
+| tstats count WHERE index=* by sourcetype,_time span=1d prestats=t |  timechart span=1d count by sourcetype   (visualization: line chart)
+| tstats count WHERE index=rapid7 by sourcetype,_time span=1d prestats=t |  timechart span=1d count by sourcetype
+
 
 # Index health
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
@@ -33,3 +36,4 @@ index="rapid7" ip=* os="*Windows 10*" | table ip, hostname, os, severe_vulnerabi
 index="rapid7" ip=* os="*Windows 10*" | stats avg(severe_vulnerabilities)
 
 
+index=rapid7 sourcetype="rapid7:nexpose:asset" |stats count by nexpose_tags | rex field=nexpose_tags "((?<junk>\w+);.*;(?<OS>.*))"| table nexpose_tags OS | stats count by OS| search OS="*-*"
