@@ -7,6 +7,7 @@
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=7d
 | tstats count WHERE index=* by sourcetype,_time span=1d prestats=t |  timechart span=1d count by sourcetype   (visualization: line chart)
 | tstats sum("License_Usage.gb") AS "totalGB" from datamodel=Meta_Woot_License_Usage where (nodename = License_Usage)(License_Usage.indexer=**) (License_Usage.idx=*) (License_Usage.st=*) groupby License_Usage.idx, _time span=1d | convert timeformat="%Y-%m-%d" ctime(_time)
+
 | tstats count WHERE index=rapid7 by sourcetype,_time span=1d prestats=t |  timechart span=1d count by sourcetype
 
 
