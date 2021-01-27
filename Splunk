@@ -13,6 +13,7 @@
 
 # Index health
 | tstats count where index=zscaler sourcetype=zscalernss-web by _time span=1d
+| tstats count where index="*aws*" sourcetype="*cloudtrail*" by _time span=1h  (visualization: line)
 
 
 index=* "*first.last@company.com*" | stats count by sourcetype
