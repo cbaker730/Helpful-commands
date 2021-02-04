@@ -40,3 +40,10 @@ index="rapid7" ip=* os="*Windows 10*" | stats avg(severe_vulnerabilities)
 
 
 index=rapid7 sourcetype="rapid7:nexpose:asset" |stats count by nexpose_tags | rex field=nexpose_tags "((?<junk>\w+);.*;(?<OS>.*))"| table nexpose_tags OS | stats count by OS| search OS="*-*"
+
+
+# AWS ports allowed inbound to an instance / IP address
+index="*aws*" sourcetype="*vpcflow*" action="allowed" dest_ip="10.10.10.10" dest_port<9999
+| stats count by dest_ip, dest_port, protocol
+| sort dest_port
+
