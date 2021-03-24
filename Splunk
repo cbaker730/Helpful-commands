@@ -47,3 +47,14 @@ index="*aws*" sourcetype="*vpcflow*" action="allowed" dest_ip="10.10.10.10" dest
 | stats count by dest_ip, dest_port, protocol
 | sort dest_port
 
+
+
+
+index=main host=web_application status=200 action=purchase file="success.do" | top productId limit=5
+productId	| count	| percent
+WC-SH-G04	| 1360	| 8.426792
+
+index=main host=web_application status=200 action=purchase file="success.do" | top productId limit=5 showperc=false
+productId	| count
+WC-SH-G04	| 1360
+
