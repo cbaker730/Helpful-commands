@@ -58,3 +58,41 @@ index=main host=web_application status=200 action=purchase file="success.do" | t
 productId	| count
 WC-SH-G04	| 1360
 
+
+index=main host=web_application status=200 file=* | rare file
+file	| count	| percent
+api	  | 1	    | 0.000858
+
+index=main host=web_application status=200 file=* | rare file date_month
+file	| date_month	| count	| percent
+api	  | march	      | 1	    | 0.000858
+
+index=main host=web_application status=200 file IN ("cart.do", "success.do") | stats count as Transactions by file | rename file as Function
+Function	| Transactions
+cart.do	  | 29328
+
+index=main host=web_application status=200 file IN ("cart.do", "success.do") | stats dc(JSESSIONID) as Logins by clientip | sort -Logins
+clientip	      | Logins
+87.194.216.51	  | 330
+
+index=main host=web_application status=200 file=* | stats sum(bytes) as TotalBytes by file | sort file
+file	  | TotalBytes
+account	| 4238
+
+index=main host=database | stats avg(Duration) as "time to complete" by Command | sort -"time to complete"
+Command	| time to complete
+SELECT * FROM users INNER JOIN creditcards ON users.userid=creditcards.userid INNER JOIN contactinfo ON users.userid=contactinfo.userid INNER JOIN usertracking ON users.userid=usertracking.userid WHERE users.userid = 2208	| 9988
+
+index=main host=web_application status=200 | stats list(useragent)         <-- duplicates
+index=main host=web_application status=200 | stats values(useragent)       <-- unique values
+
+index=main host=web_application status=200 | stats values(useragent) as "Agents used"
+Agents used
+Googlebot/2.1 ( http://www.googlebot.com/bot.html)
+
+index=main host=web_application status=200 | stats count(useragent) as "Times used" by useragent | rename useragent as "Agents used"
+Agents used	| Times used
+Googlebot/2.1 ( http://www.googlebot.com/bot.html)	| 1131
+
+
+
