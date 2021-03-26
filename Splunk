@@ -118,3 +118,16 @@ index=bcgassets sourcetype=asset_list | stats list(Asset) by Employee
 
 
 index=main sourcetype=db_audit | stats avg(Duration) as "time to complete" by Command
+
+
+index=web sourcetype=access_combined NOT status=200 | lookup http_status code as status, OUTPUT code as "HTTP Code", description as "HTTP Description" | table host, "HTTP Code", "HTTP Description"       <-- overwrite existing fields
+index=web sourcetype=access_combined NOT status=200 | lookup http_status code as status, OUTPUTNEW code as "HTTP Code", description as "HTTP Description" | table host, "HTTP Code", "HTTP Description"    <-- don't overwrite existing fields
+
+
+| inputlookup products_lookup
+
+index="main" host="web_application" file="success.do"  | lookup products.csv productId as productId, OUTPUT product_name as ProductName | stats count by ProductName
+ProductName	        | count
+Benign Space Debris	| 979
+
+
