@@ -1,5 +1,11 @@
 ### Splunk queries  https://www.splunk.com/pdfs/solution-guides/splunk-quick-reference-guide.pdf or https://docs.splunk.com/Documentation/Splunk/8.1.0/SearchReference/Stats
 
+
+To break query across lines:
+Ctrl + \
+Command + \
+
+
 # List indexes
 | eventcount summarize=false index=* index=_* | dedup index | fields index
 | tstats count WHERE index=* by index | table index
@@ -58,6 +64,8 @@ index=main host=web_application status=200 action=purchase file="success.do" | t
 productId	| count
 WC-SH-G04	| 1360
 
+index=main host=web_application status=200 action=purchase file="success.do" | top product_name by Vendor limit=5 showperc=false countfield="Number of Sales" useother=True
+
 
 index=main host=web_application status=200 file=* | rare file
 file	| count	| percent
@@ -67,6 +75,7 @@ index=main host=web_application status=200 file=* | rare file date_month
 file	| date_month	| count	| percent
 api	  | march	      | 1	    | 0.000858
 
+index=main sourcetype=access_combined_wcookie file=success.do OR file=cart.do status=200
 index=main host=web_application status=200 file IN ("cart.do", "success.do") | stats count as Transactions by file | rename file as Function
 Function	| Transactions
 cart.do	  | 29328
@@ -78,6 +87,8 @@ clientip	      | Logins
 index=main host=web_application status=200 file=* | stats sum(bytes) as TotalBytes by file | sort file
 file	  | TotalBytes
 account	| 4238
+
+index=main sourcetype=db_audit | stats avg(Duration) as "time to complete" by Command
 
 index=main host=database | stats avg(Duration) as "time to complete" by Command | sort -"time to complete"
 Command	| time to complete
@@ -94,5 +105,16 @@ index=main host=web_application status=200 | stats count(useragent) as "Times us
 Agents used	| Times used
 Googlebot/2.1 ( http://www.googlebot.com/bot.html)	| 1131
 
+index=main host=web_application status=200 | stats distinct_count(useragent) as "Number of user agents"
+index=main host=web_application status=200 | stats dc(JSESSIONID) as "Number of sessions" by useragent
 
 
+index=sales sourcetype=vendor_sales | stats count as "Units Sold" sum(price) as "Gross Sales" by product_name.    <-- count and sum() must be in same pipe for this to work as desired
+
+
+index=sales sourcetype=vendor_sales | stats avg(sale_price), min(sale_price), max(sale_price) by categoryId
+
+index=bcgassets sourcetype=asset_list | stats list(Asset) by Employee
+
+
+index=main sourcetype=db_audit | stats avg(Duration) as "time to complete" by Command
