@@ -131,3 +131,59 @@ ProductName	        | count
 Benign Space Debris	| 979
 
 
+
+top: count frequency of fields
+rare: count frequency of fields
+stats: calculate statistics between fields when you don't need the results to be time-based
+chart: calculate statistics between fields with a field as x-axis that is not time, and use by to split values
+timechart: like chart when time is the x-axis (use by to split values)
+
+
+
+#### chart
+
+index=web sourcetype=access_combined status>299 | chart count over status by host                           # null skews results
+index=web sourcetype=access_combined status>299 | chart count over status by host usenull=false             # removes nulls
+index=web sourcetype=access_combined status>299 product_name=* | chart count over status by host            # more efficient
+index=web sourcetype=access_combined status>299 product_name=* | chart count over status by host useother=f # just show the top 10 with no 'other'
+index=web sourcetype=access_combined status>299 product_name=* | chart count over status by host limit=0    # show all results
+
+
+#### timechart
+
+index=sales sourcetype=vendor_sales | timechart span=12hr sum(price) by product_name limit=0
+
+
+#### timewrap - cool way to compare weeks to each other in a chart
+
+index=sales sourcetype=vendor_sales product_name="Dream Crusher"
+| timechart span=1d sum(price) by product_name
+| timewrap 7d | rename _time as Day
+| eval Day = strftime(Day, "%A")
+
+
+#### Bubble chart query
+
+index=sales sourcetype=vendor_sales VendorID >= 4000 AND VendorID <= 8999
+| stats sum(sale_price) as "Total", count as "#Sold" by date_hour | sort date_hour | rename date_hour as "Time" 
+| table "Time" "#Sold" "Total"
+
+
+#### Trellis visualization can display multiple line charts e.g. for different products, but the search is only run once
+
+
+
+#### Cloropleth map
+
+index=sales sourcetype=vendor_sales VendorID>=5000 AND VendorID<=5055
+| stats count as Sales by VendorCountry
+| geom geo_countries featureIdField=VendorCountry                       # geo_countries is the name of the .kmz file
+
+
+
+
+
+
+
+
+
