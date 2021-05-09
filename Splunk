@@ -182,6 +182,20 @@ index=sales sourcetype=vendor_sales VendorID>=5000 AND VendorID<=5055
 
 
 
+(index=network sourcetype=cisco_wsa_squid) OR
+(index=web sourcetype=access_combined) status>399
+| fields sourcetype, status
+| transaction status maxspan=5m
+| search sourcetype=access_combined AND sourcetype=cisco_wsa_squid
+| timechart count by status
+| addtotals
+| search Total>4
+| fields - Total
+
+
+
+
+
 
 
 
