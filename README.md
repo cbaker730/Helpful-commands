@@ -1,3 +1,3 @@
 Helpful commands and scripts
 
-Bob was here
+Bob was here. and Chris too!
